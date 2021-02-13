@@ -84,7 +84,9 @@ class Payments(ViewSet):
         customer_id = self.request.query_params.get('customer', None)
 
         if customer_id is not None:
-            payment_types = payment_types.filter(customer__id=customer_id)
+            payment_types = payment_types.filter(customer__user = request.auth.user)
+        else:
+            payment_types = payment_types.filter(customer__user = request.auth.user)
 
         serializer = PaymentSerializer(
             payment_types, many=True, context={'request': request})
