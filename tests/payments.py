@@ -40,4 +40,18 @@ class PaymentTests(APITestCase):
         self.assertEqual(json_response["expiration_date"], "2024-12-31")
         self.assertEqual(json_response["create_date"], str(datetime.date.today()))
 
-    # TODO: Delete payment type
+    def test_delete_payment_type(self):
+        """
+        Ensure we can delete a payment type
+        """
+        self.test_create_payment_type()
+        
+        url='/paymenttypes/1'
+        response = self.client.delete(url, None, format="json")
+        
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        url = '/paymenttypes/1'
+        response = self.client.get(url, None, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
